@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Producto, Categoria } from "@/lib/generated/prisma/client";
+import { cobrarVenta } from "./actions";
 
 type ProductoConCategoria = Producto & { categoria: Categoria };
 type ItemCarrito = {
@@ -10,6 +11,7 @@ type ItemCarrito = {
   precio: number;
   cantidad: number;
 };
+type MetodoPago = "efectivo" | "tarjeta";
 
 export default function PosClient({
   productos,
@@ -17,6 +19,7 @@ export default function PosClient({
   productos: ProductoConCategoria[];
 }) {
   const [carrito, setCarrito] = useState<ItemCarrito[]>([]);
+  const [metodoPago, setMetodoPago] = useState<MetodoPago>("efectivo");
 
   function agregar(producto: ProductoConCategoria) {
     setCarrito((actual) => {
@@ -27,7 +30,7 @@ export default function PosClient({
           item.id === producto.id
             ? { ...item, cantidad: item.cantidad + 1 }
             : item,
-        )
+        );
       }
 
       return [
@@ -44,12 +47,13 @@ export default function PosClient({
 
   function modificarCantidad(productoId: number, cantidad: number) {
     setCarrito((actual) =>
-      actual.map((item) =>
-        item.id === productoId
-          ? { ...item, cantidad: item.cantidad + cantidad }
-          : item,
-      )
-      .filter((item) => item.cantidad > 0)
+      actual
+        .map((item) =>
+          item.id === productoId
+            ? { ...item, cantidad: item.cantidad + cantidad }
+            : item,
+        )
+        .filter((item) => item.cantidad > 0),
     );
   }
 
@@ -57,10 +61,29 @@ export default function PosClient({
     setCarrito((actual) => actual.filter((item) => item.id !== productoId));
   }
 
+  function cancelarVenta() {
+    setCarrito([]);
+    setMetodoPago("efectivo");
+  }
+
   const total = carrito.reduce(
     (suma, item) => suma + item.precio * item.cantidad,
     0,
   );
+
+  async function venta() {
+    if (carrito.length === 0) return alert("El carrito está vacío");
+
+    await cobrarVenta(
+      carrito.map((item) => ({ id: item.id, cantidad: item.cantidad })),
+      3,
+      metodoPago
+    );
+
+    setCarrito([]);
+    setMetodoPago("efectivo");
+    alert("Venta realizada con éxito");
+  }
 
   return (
     <div>
@@ -70,7 +93,6 @@ export default function PosClient({
         </button>
       ))}
 
-      <h2>Total: ${total}</h2>
       {carrito.map((item) => (
         <div key={item.id}>
           {item.nombre} × {item.cantidad} = ${item.precio * item.cantidad}
@@ -79,6 +101,18 @@ export default function PosClient({
           <button onClick={() => eliminar(item.id)}>x</button>
         </div>
       ))}
+
+      <h2>Total: ${total}</h2>
+
+      <div className="mt-4 flex gap-2">
+        <button onClick={() => setMetodoPago("efectivo")}>Efectivo</button>
+        <button onClick={() => setMetodoPago("tarjeta")}>Tarjeta</button>
+      </div>
+
+      <div className="mt-4 flex gap-2">
+        <button onClick={venta}>Cobrar</button>
+        <button onClick={cancelarVenta}>Cancelar venta</button>
+      </div>
     </div>
   );
 }
