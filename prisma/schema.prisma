@@ -24,14 +24,15 @@ model Empleado {
   ap_paterno String
   ap_materno String
   rol String
+  venta Venta[]
 }
 
 model Producto {
   id Int @id @default(autoincrement())
   nombre String
-  descripcion String
+  descripcion String?
   precio Float
-  estado String
+  estado Boolean @default(true)
   id_categoria Int 
   categoria Categoria @relation(fields: [id_categoria], references: [id])
   detalle_venta DetalleVenta[]
@@ -39,11 +40,12 @@ model Producto {
 
 model Venta {
   id Int @id @default(autoincrement())
-  fecha DateTime
+  fecha DateTime @default(now())
   total Float
   metodo_pago String
   id_empleado Int
   detalle_venta DetalleVenta[]
+  empleado Empleado @relation(fields: [id_empleado], references: [id])
 }
 
 model DetalleVenta {
