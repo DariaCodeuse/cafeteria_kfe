@@ -97,40 +97,39 @@ export function ProductoDialog({ categorias, producto }: Props) {
                 defaultValue={producto?.descripcion ?? ""}
                 placeholder="Cómo se prepara o qué lleva el producto"
               />
-              <FieldDescription>
-                Aparece en el catálogo del punto de venta.
-              </FieldDescription>
             </Field>
 
-            <Field>
-              <FieldLabel htmlFor="precio">Precio</FieldLabel>
-              <Input
-                id="precio"
-                name="precio"
-                type="number"
-                step="0.01"
-                min="0"
-                defaultValue={producto?.precio}
-                required
-              />
-            </Field>
+            <div className="grid grid-cols-3 gap-4">
+              <Field>
+                <FieldLabel htmlFor="precio">Precio</FieldLabel>
+                <Input
+                  id="precio"
+                  name="precio"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  defaultValue={producto?.precio}
+                  required
+                />
+              </Field>
 
-            <Field>
-              <FieldLabel htmlFor="id_categoria">Categoría</FieldLabel>
-              <select
-                id="id_categoria"
-                name="id_categoria"
-                defaultValue={producto?.id_categoria}
-                className="border-input h-9 w-full rounded-md border bg-transparent px-3 text-sm shadow-xs"
-                required
-              >
-                {categorias.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nombre}
-                  </option>
-                ))}
-              </select>
-            </Field>
+              <Field className="col-span-2">
+                <FieldLabel htmlFor="id_categoria">Categoría</FieldLabel>
+                <select
+                  id="id_categoria"
+                  name="id_categoria"
+                  defaultValue={producto?.id_categoria}
+                  className="border-input h-9 w-full rounded-md border bg-transparent px-3 text-sm shadow-xs"
+                  required
+                >
+                  {categorias.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nombre}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
           </FieldGroup>
 
           <DialogFooter>
