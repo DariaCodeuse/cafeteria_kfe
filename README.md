@@ -1,6 +1,7 @@
 # Cafetería KFE
 
 Sistema de punto de venta y administración para la cafetería KFE.
+
 *Prueba técnica para el Departamento de Sistemas de Grupo Prosur*
 
 ## Qué hace
@@ -94,6 +95,7 @@ Cada módulo separa las consultas y la lógica de los componentes que las muestr
 
 ## Modelo de datos
 <img width="1536" height="748" alt="schema-kfe" src="https://github.com/user-attachments/assets/b67b6620-41f0-4a2b-8e5d-e0a3f87efc7b" />
+
 **Categoría.** Agrupa los productos del menú.
 
 **Producto.** Nombre, descripción, precio actual, disponibilidad y categoría.
