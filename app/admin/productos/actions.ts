@@ -30,10 +30,10 @@ export async function actualizarProducto(formData: FormData) {
   revalidatePath("/admin/productos")
 }
 
-export async function desactivarProducto(formData: FormData) {
+export async function cambiarEstado(id: number, estado: boolean) {
   await prisma.producto.update({
-    where: { id: Number(formData.get("id")) },
-    data: { estado: false },
+    where: { id },
+    data: { estado },
   })
 
   revalidatePath("/admin/productos")

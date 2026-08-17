@@ -1,55 +1,26 @@
-import { prisma } from "@/lib/prisma"
-import { crearProducto, desactivarProducto } from "./actions"
+import { obtenerProductos, obtenerCategorias } from "./queries";
+import { TablaProductos } from "./tabla-productos";
+import { ProductoDialog } from "./producto-dialog";
 
 export default async function ProductosPage() {
-  const productos = await prisma.producto.findMany({
-    include: { categoria: true },
-  })
-
-  const categorias = await prisma.categoria.findMany()
-  
+  const [productos, categorias] = await Promise.all([
+    obtenerProductos(),
+    obtenerCategorias(),
+  ]);
 
   return (
-    <div>
-      <h1>Productos</h1>
-      <div className="mb-4 border-b pb-4">
-        <h2>Crear Producto</h2>
-        <form action={crearProducto}>
-          <input name="nombre" placeholder="Nombre" required />
-          <input name="descripcion" placeholder="Descripción" />
-          <input name="precio" type="number" required />
-          <select name="id_categoria">
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>{c.nombre}</option>
-            ))}
-          </select>
-          <button type="submit">Guardar</button>
-        </form>
+    <div className="space-y-4 p-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-medium">Catálogo</h2>
+          <p className="text-sm text-muted-foreground">
+            {productos.length} productos registrados
+          </p>
+        </div>
+        <ProductoDialog categorias={categorias} />
       </div>
 
-      <div>
-        <h2>Desactivar Producto</h2>
-        {productos.map((p) => (
-          <li key={p.id}>
-            {p.nombre} — ${p.precio}
-            <form action={desactivarProducto}>
-              <input type="hidden" name="id" value={p.id} />
-              <button type="submit">Desactivar</button>
-            </form>
-          </li>
-        ))}
-      </div>
-      
-      <div>
-        <h2>Lista de Productos</h2>
-        <ul>
-          {productos.map((p) => (
-            <li key={p.id}>
-              {p.nombre} — ${p.precio} — {p.categoria.nombre} - {p.estado ? "Activo" : "Inactivo"}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <TablaProductos productos={productos} categorias={categorias} />
     </div>
-  )
+  );
 }
