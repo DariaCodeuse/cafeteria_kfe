@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="flex flex-1 flex-col p-4">{children}</div>
           </SidebarInset>
         </SidebarProvider>
+        <Toaster closeButton richColors position="top-right" />
       </body>
     </html>
   );
