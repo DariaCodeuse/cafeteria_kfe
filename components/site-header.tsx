@@ -7,7 +7,9 @@ import { usePathname } from "next/navigation"
 const titulos: Record<string, string> = {
   "/pos": "Punto de venta",
   "/admin/productos": "Productos",
-  "/reportes": "Módulo gerencial",
+  "/admin/categorias": "Categorias",
+  "/reportes": "Reportes y métricas",
+  "/admin/empleados": "Empleados",
 }
 
 export function SiteHeader() {
