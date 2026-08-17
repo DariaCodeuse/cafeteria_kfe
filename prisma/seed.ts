@@ -71,7 +71,59 @@ async function main() {
       { nombre: "Pastel de Chocolate", descripcion: "Pastel de chocolate de textura suave y sabor intenso", precio: 65, id_categoria: postres.id },
       { nombre: "Pastel de Cheesecake", descripcion: "Pastel cremoso de queso con base de galleta", precio: 65, id_categoria: postres.id },
     ]
-  });
+  })
+
+  // Ventaas prueba
+  const productosCreados = await prisma.producto.findMany();
+  const empleados = await prisma.empleado.findMany();
+  const cajeros = empleados.filter((e) => e.rol === "Cajero");
+  const matutino = cajeros.slice(0, 2);
+  const vespertino = cajeros.slice(2);
+
+  function fechaAleatoria() {
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() - Math.floor(Math.random() * 60));
+
+    const esDomingo = fecha.getDay() === 0;
+    const cierre = esDomingo ? 18 : 21;
+    const hora = 8 + Math.floor(Math.random() * (cierre - 8));
+
+    fecha.setHours(hora, Math.floor(Math.random() * 60), 0, 0);
+    return fecha;
+  }
+
+  for (let i = 0; i < 50; i++) {
+    const fecha = fechaAleatoria();
+    const turno = fecha.getHours() < 14 ? matutino : vespertino;
+    const empleado = turno[Math.floor(Math.random() * turno.length)];
+    const cuantos = 1 + Math.floor(Math.random() * 4);
+    const detalles = [];
+
+    for (let j = 0; j < cuantos; j++) {
+      const producto =
+        productosCreados[Math.floor(Math.random() * productosCreados.length)];
+      detalles.push({
+        id_producto: producto.id,
+        cantidad: 1 + Math.floor(Math.random() * 3),
+        precio_unitario: producto.precio,
+      });
+    }
+
+    const total = detalles.reduce(
+      (s, d) => s + d.precio_unitario * d.cantidad,
+      0,
+    );
+
+    await prisma.venta.create({
+      data: {
+        fecha,
+        total,
+        metodo_pago: Math.random() > 0.5 ? "efectivo" : "tarjeta",
+        id_empleado: empleado.id,
+        detalle_venta: { create: detalles },
+      },
+    });
+  }
 }
 
 main()
