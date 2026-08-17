@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { CirclePlusIcon, MailIcon } from "lucide-react"
+import { LayoutDashboardIcon } from "lucide-react"
 
 export function NavMain({
   items,
@@ -25,28 +25,25 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
-              tooltip="Quick Create"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+              size="lg"
+              tooltip="Punto de Venta"
+              className="data-[slot=sidebar-menu-button]:p-1.5! min-w-8 rounded-xl bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+              render={<Link href="/pos" />}
             >
-              <CirclePlusIcon
-              />
-              <span>Quick Create</span>
+              <LayoutDashboardIcon />
+              <span>Punto de Venta</span>
             </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <MailIcon
-              />
-              <span className="sr-only">Inbox</span>
-            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[slot=sidebar-menu-button]:p-1.5!"
+                tooltip={item.title}
+                render={<Link href={item.url} />}
+              >
                 {item.icon}
                 <span>{item.title}</span>
               </SidebarMenuButton>
