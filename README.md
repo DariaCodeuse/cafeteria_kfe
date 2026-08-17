@@ -2,15 +2,15 @@
 
 Sistema de punto de venta y administración para la cafetería KFE.
 
-Prueba técnica para el Departamento de Sistemas de Grupo Prosur.
+*Prueba técnica para el Departamento de Sistemas de Grupo Prosur*
 
 ## Qué hace
+El proyecto cubre los 3 módulos solicitados:
+**1. Punto de venta.** El cajero arma el ticket seleccionando productos del catálogo, ajusta cantidades, elige método de pago y cobra. Cada venta se guarda con su desglose.
+**2. Administración.** Alta y edición de productos, categorías y personal. Control de qué productos se ofrecen al público.
+**3. Módulo gerencial.** Productos vendidos en un rango de fechas, los tres más vendidos y una gráfica de ingresos por producto.
 
-**Punto de venta.** El cajero arma el ticket seleccionando productos del catálogo, ajusta cantidades, elige método de pago y cobra. Cada venta se guarda con su desglose.
-
-**Administración.** Alta y edición de productos, categorías y personal. Control de qué productos se ofrecen al público.
-
-**Módulo gerencial.** Productos vendidos en un rango de fechas, los tres más vendidos y una gráfica de ingresos por producto.
+Personalmente, tome los datos de una cafetería de mi ciudad "Cerro Brujo" a la que debo agradecer la información de su menú.
 
 ## Decisiones de diseño
 
@@ -26,7 +26,7 @@ Prueba técnica para el Departamento de Sistemas de Grupo Prosur.
 
 ## Tecnologías
 
-Next.js (App Router), TypeScript, Prisma 7 con SQLite, Tailwind CSS, shadcn/ui y Recharts.
+Next.js (App Router), TypeScript, Prisma 7 con SQLite, Tailwind CSS, shadcn/ui (usado en residencia, razón por la que decidí animarme a implementar en este proyecto).
 
 Se eligió SQLite para que el proyecto se levante sin configurar un servidor de base de datos ni crear cuentas externas. Con Prisma, migrar a PostgreSQL requiere cambiar el proveedor en el esquema.
 
@@ -60,7 +60,7 @@ Abrir http://localhost:3000
 
 El seed carga 6 categorías, 33 productos, 5 empleados y 50 ventas repartidas en los últimos 60 días, dentro del horario de la cafetería y asignadas al turno correspondiente.
 
-Las fechas son relativas al día en que se ejecuta, así que el módulo gerencial siempre muestra información reciente. El seed limpia la base antes de cargar, por lo que puede ejecutarse las veces que sea necesario.
+*Las fechas son relativas al día en que se ejecuta, así que el módulo gerencial siempre muestra información reciente. El seed limpia la base antes de cargar, por lo que puede ejecutarse las veces que sea necesario.*
 
 ## Rutas
 
@@ -94,6 +94,7 @@ prisma/                 Esquema, migraciones y seed
 Cada módulo separa las consultas y la lógica de los componentes que las muestran.
 
 ## Modelo de datos
+<img width="1536" height="748" alt="schema-kfe" src="https://github.com/user-attachments/assets/b67b6620-41f0-4a2b-8e5d-e0a3f87efc7b" />
 
 **Categoría.** Agrupa los productos del menú.
 
@@ -111,3 +112,8 @@ Cada módulo separa las consultas y la lógica de los componentes que las muestr
 - Carga de imágenes de productos. El formulario acepta una URL; falta el almacenamiento de archivos.
 - Historial de tickets individuales.
 - Impresión de ticket.
+
+## NOTAS DE APRENDIZAJE PARA MI:
+- Me siento satisfecha pues implemente una tecnología que aprendí en residencia: Shadcn. Me parece una librería super linda y además sencilla de modificar dependiendo de lo que busques.
+- Aprendí a usar Prisma, un ORM que sin duda me facilito un tema complicado para mi: las consultas a db
+- Quisiera mejorar algunas cosas se seguridad como la sanitización de inputs en algunos formularios y de paso poner en práctica mi aprendizaje en Ciberseguridad.
